@@ -1,62 +1,52 @@
 package com.morichan.studyschedule
 
 
-
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
-class RecyclerViewAdapter(private val context:Context) :RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-
-    val items:MutableList<TaskCreate> = mutableListOf()
+import kotlinx.android.synthetic.main.item_task.view.*
 
 
+class CustomAdapter(private val customList: Array<String>) : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    //
+    lateinit var listener: OnItemClickListener
 
-        val view = LayoutInflater.from(context).inflate(R.layout.item_task,parent,false)
-        return ViewHolder(view)
-
-
-
-
-
-
+    // ViewHolderクラス(別ファイルに書いてもOK)
+    class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+        val titleView = view.textView2
     }
 
+    // getItemCount onCreateViewHolder onBindViewHolderを実装
+    // 上記のViewHolderクラスを使ってViewHolderを作成
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val item = layoutInflater.inflate(R.layout.item_task, parent, false)
+        return CustomViewHolder(item)
+    }
 
-
+    // recyclerViewのコンテンツのサイズ
     override fun getItemCount(): Int {
-
-        return items.size
-
+        return customList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        val item = items[position]
-        holder.titleView.text = item.title
-
-
-
-    }
-    fun addAll(items:List<TaskCreate>){
-        this.items.addAll(items)
-        notifyDataSetChanged()
-    }
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-
-
-        val titleView= view.findViewById<TextView>(R.id.textView2)
-
-
+    // ViewHolderに表示する画像とテキストを挿入
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
+        holder.view.textView2.text = customList[position]
+        // タップしたとき
+        holder.view.setOnClickListener {
+            listener.onItemClickListener(it, position, customList[position])
+        }
     }
 
+    //インターフェースの作成
+    interface OnItemClickListener{
+        fun onItemClickListener(view: View, position: Int, clickedText: String)
+    }
 
-
-
+    // リスナー
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
+    }
 }

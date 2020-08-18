@@ -1,10 +1,11 @@
 package com.morichan.studyschedule
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
@@ -20,8 +21,6 @@ class TodayFragment : Fragment() {
 
     var task: MutableList<TaskCreate> = mutableListOf()
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,72 +33,44 @@ class TodayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RecyclerViewAdapter(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
+        val list = Array<String>(10) { "テキスト$it" }
+        val adapter = CustomAdapter(list)
+        val layoutManager = LinearLayoutManager(requireContext())
 
         recyclerView.adapter = adapter
-        adapter.addAll(task)
+        recyclerView.setHasFixedSize(true)
 
-        var query: RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java)
-        var result: RealmResults<TaskCreate> = query.findAll()
+        // インターフェースの実装
+        adapter.setOnItemClickListener(
+            object : CustomAdapter.OnItemClickListener {
+                override fun onItemClickListener(view: View, position: Int, clickedText: String) {
 
-        for (items in result){
-            task.add(TaskCreate(items.title))
-        }
-        adapter.addAll(task)
-        recyclerView.adapter = adapter
-
-
-
+//                    val intent = Intent(requireContext(), TodayEditActivity::class.java)
+//                    startActivity(intent)
+                }
+            })
 
         taskplus.setOnClickListener {
-
-
-            val intent = Intent(activity, TodayListCreateActivity::class.java)
+            val intent = Intent(activity,TodayListCreateActivity::class.java)
             startActivity(intent)
-
-
         }
-
 
 
 
 
     }
+
 
     override fun onResume() {
         super.onResume()
 
-        val adapter = RecyclerViewAdapter(requireContext())
-        recyclerView.layoutManager = LinearLayoutManager(activity)
 
         var query: RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java)
         var result: RealmResults<TaskCreate> = query.findAll()
 
-        task.clear()
-
-        for (items in result){
-            task.add(TaskCreate(items.title))
-        }
-        adapter.addAll(task)
-        recyclerView.adapter = adapter
-
-
-
-
-
 
     }
-
-
-
-
-
-
-    companion object {
-
-    }
-
 }
 
