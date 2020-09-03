@@ -18,17 +18,17 @@ class MainActivity : AppCompatActivity() {
 
 
         val todayFragment = TodayFragment()
-      //  val goal1Fragment = Goal1Fragment()
+        val tomorrowFragment = TomorrowFragment()
 
 
         fragmentlist.add(todayFragment)
-    //    fragmentlist.add(goal1Fragment)
+        fragmentlist.add(tomorrowFragment)
 
         val tabLayout = findViewById<TabLayout>(R.id.tablayout)
 
         val fragmentAdapter = FragmentAdapter(this, fragmentlist)
 
-        var goal1 :String = "ゴール1"
+        var tomorrow :String = "明日"
 
 
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 if (position == 0) {
                     tab.text = "今日"
                 } else if (position == 1) {
-                    tab.text = goal1
+                    tab.text = tomorrow
 
 
                 }

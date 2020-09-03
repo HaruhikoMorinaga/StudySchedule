@@ -2,6 +2,7 @@ package com.morichan.studyschedule
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class TodayFragment : Fragment() {
     var task: MutableList<TaskCreate> = mutableListOf()
 
 
+    val adapter = CustomAdapter(task)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,33 +37,33 @@ class TodayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
 
 
-        val adapter = CustomAdapter(task)
-        val layoutManager = LinearLayoutManager(requireContext())
 
-        recyclerView.adapter = adapter
+//        val adapter = CustomAdapter(task)
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+//        val layoutManager = LinearLayoutManager(requireContext())
+
         recyclerView.setHasFixedSize(true)
-
-
-
 
         adapter.setOnItemClickListener(
             object : CustomAdapter.OnItemClickListener {
-                override fun onItemClickListener(view: View, position: Int
-                                                 ,clickedText:String
+                override fun onItemClickListener(
+                    view: View, position: Int, clickedText: String
                 ) {
 
-
-
                     val intent = Intent(requireContext(), TodayEditActivity::class.java)
+                    intent.putExtra("titletask",task[position].title)
+                    intent.putExtra("radiobuttoncheck",task[position].radioButtoncheck)
                     startActivity(intent)
                 }
             })
 
         taskplus.setOnClickListener {
-            val intent = Intent(activity,TodayListCreateActivity::class.java)
+            val intent = Intent(activity, TodayListCreateActivity::class.java)
             startActivity(intent)
         }
 
@@ -74,14 +76,23 @@ class TodayFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        var query: RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java).distinct("title")
+        query.equalTo("radioButtoncheck", "today")
 
-
-        var query: RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java)
-//        query.equalTo("title",title)
         var result: RealmResults<TaskCreate> = query.findAll()
 
-        val adapter = CustomAdapter(result)
+
+
+        task.clear()
+        task.addAll(result)
+
+
+
+
+
+
         recyclerView.adapter = adapter
+
 
 
     }

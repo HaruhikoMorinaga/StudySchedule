@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_today_edit.view.*
 import kotlinx.android.synthetic.main.item_task.view.*
 
 
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.item_task.view.*
     //
     lateinit var listener: OnItemClickListener
 
-    // ViewHolderクラス(別ファイルに書いてもOK)
+     // ViewHolderクラス(別ファイルに書いてもOK)
     class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val titleView = view.textView2
     }
@@ -29,23 +30,26 @@ import kotlinx.android.synthetic.main.item_task.view.*
         return task.size
     }
 
-    // ViewHolderに表示する画像とテキストを挿入
+
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.view.textView2.text = task[position].toString()
+
         // タップしたとき
         holder.view.setOnClickListener {
-            listener.onItemClickListener(it, position, task[position].toString())
+            listener.onItemClickListener(it, position,task[position].toString())
         }
     }
 
-    //インターフェースの作成
     interface OnItemClickListener{
-        fun onItemClickListener(view: View, position: Int
-                                , clickedText: String
-        )}
+        fun onItemClickListener(view: View, position: Int,clickedText:String)
+
+
+        }
 
     // リスナー
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        this.listener = listener
-    }
+
+     fun setOnItemClickListener(listener: OnItemClickListener){
+         this.listener = listener
+     }
+
 }
