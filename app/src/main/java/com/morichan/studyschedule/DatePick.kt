@@ -4,10 +4,14 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_today_list_create.*
+import java.time.LocalDate
 import java.util.*
 
 
@@ -21,29 +25,20 @@ class TimePick : DialogFragment(), TimePickerDialog.OnTimeSetListener {
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
 
+
         return TimePickerDialog(
             activity,
-            // in order to return parameters to MainActivity
             activity as TodayListCreateActivity,
             hour,
             minute,
             true)
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        //
-    }
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//
-//            realm.executeTransaction{
-//
-//                val newMemo: TaskCreate = it.createObject(TaskCreate::class.java)
-//                newMemo.title = title
-//                newMemo.radioButtoncheck = radioButtonString
-//
-//            }
 
 
-    }
+    }}
+
+

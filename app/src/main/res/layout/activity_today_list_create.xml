@@ -21,7 +21,7 @@
 
 
     <Button
-        android:id="@+id/timepickButton"
+        android:id="@+id/timepickbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -38,7 +38,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timepickButton"
+        app:layout_constraintTop_toBottomOf="@id/timepickbutton"
         android:orientation="horizontal"
         >
         <RadioButton
@@ -52,17 +52,37 @@
             android:layout_marginStart="30dp"
             android:text="明日"
             android:id="@+id/radioButtontomorrow"></RadioButton>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="毎日"
+            android:id="@+id/radioButtonEveryDay"></RadioButton>
 
     </RadioGroup>
+
+
+    <Spinner
+        android:id="@+id/maxIntSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup"
+        android:layout_marginTop="50dp"></Spinner>
+
+
+
+  
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:text="保存"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/maxIntSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

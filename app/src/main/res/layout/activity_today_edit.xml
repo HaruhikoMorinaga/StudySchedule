@@ -27,40 +27,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <CheckBox
-        android:id="@+id/everydayBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="毎日"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressBar"
-        />
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/everydayBox"
-        android:orientation="horizontal"
-        >
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="今日"
-        android:id="@+id/radioButtontoday"
-        tools:ignore="MissingConstraints"></RadioButton>
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:text="明日"
-        android:id="@+id/radioButtontomorrow"
-        tools:ignore="MissingConstraints"></RadioButton>
+        android:layout_marginTop="50dp"
+        tools:layout_editor_absoluteY="362dp">
+
+        <RadioButton
+            android:id="@+id/radioButtontoday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今日"
+            tools:ignore="MissingConstraints"></RadioButton>
+
+        <RadioButton
+            android:id="@+id/radioButtontomorrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="明日"
+            tools:ignore="MissingConstraints"></RadioButton>
+        <RadioButton
+            android:id="@+id/radioButtonEveryday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="毎日"
+            tools:ignore="MissingConstraints"
+
+            ></RadioButton>
+
     </RadioGroup>
 
 
@@ -69,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="保存"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/radioGroup"></Button>
