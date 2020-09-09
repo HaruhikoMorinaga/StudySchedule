@@ -19,5 +19,7 @@ open class TaskCreate @RequiresApi(Build.VERSION_CODES.O) constructor(
     open var complete : Boolean = false,
     open var deleteBoolean: Boolean = false
 
+
+
 )   :RealmObject()
 

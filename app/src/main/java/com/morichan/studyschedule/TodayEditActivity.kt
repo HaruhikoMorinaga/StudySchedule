@@ -53,22 +53,20 @@ class TodayEditActivity : AppCompatActivity() {
         }
 
 
-        if (seekBarrealm.calendarHour<localDateTime.hour&&
-                seekBarrealm.radioButtoncheck !=="tomorrow"){
+        if (seekBarrealm.calendarDate==localDateTime.dayOfYear&&
+            seekBarrealm.calendarHour<localDateTime.hour
+          ){
             titleTextView.setTextColor(Color.parseColor("#ff4500"))
         }
         if (seekBarrealm.calendarHour==localDateTime.hour&&
                 seekBarrealm.calendarMinute<localDateTime.minute&&
-                    seekBarrealm.radioButtoncheck !=="tomorrow"
+                    seekBarrealm.calendarDate == localDateTime.dayOfYear
            ){
             titleTextView.setTextColor(Color.parseColor("#ff4500"))
         }
-        if (seekBarrealm.calendarDate<localDateTime.dayOfYear&&
-                seekBarrealm.radioButtoncheck !== "tomorrow"){
-
+        if (seekBarrealm.calendarDate<localDateTime.dayOfYear
+              ){
             titleTextView.setTextColor(Color.parseColor("#ff4500"))
-
-
         }
         else{
             titleTextView.setTextColor(Color.parseColor("#000000"))
@@ -93,19 +91,27 @@ class TodayEditActivity : AppCompatActivity() {
 
 
         saveButton.setOnClickListener {
-            if (seekBarint==seekBarmaxInt){
-                complete = true
-
-                var result = realm.where(TaskCreate::class.java)
-                    .equalTo("title",stringtitle).findAll()
-                realm.executeTransaction {
-                    result.deleteAllFromRealm()
-
-                    finish()
-                }
-
-
-            }
+//            if (seekBarint==seekBarmaxInt){
+//                complete = true
+//
+//                var result = realm.where(TaskCreate::class.java)
+//                    .equalTo("title",stringtitle).findAll()
+//
+//                var graphresult = realm.where(Graph::class.java)
+//                    .equalTo("")
+//                realm.executeTransaction {
+//
+//
+//
+//                    result.deleteAllFromRealm()
+//
+//
+//
+//                    finish()
+//                }
+//
+//
+//            }
 
             if (radioButtontoday.isChecked ==true){
                 stringcheckradio = "today"

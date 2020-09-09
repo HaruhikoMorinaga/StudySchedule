@@ -17,6 +17,7 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_today_list_create.*
 import kotlinx.android.synthetic.main.fragment_today.*
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
@@ -31,6 +32,7 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
     var radioButtonString :String = ""
 
     var spinnerposition = 0
+    var spinnerDateposition = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     var localDate :LocalDate = LocalDate.now()
@@ -46,31 +48,50 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
         var timenow = LocalTime.now()
 
 
+        saveButton.isClickable  =false
+
         radioGroup.clearCheck()
 
             saveButton.setOnClickListener {
                 val title: String = titleEditText.text.toString()
-                val radiochecktoday = radioButtontoday.isChecked
-                val radiochecktomorrow = radioButtontomorrow.isChecked
-                var maxInt :Int = (spinnerposition+1)
+                var querycheck :RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java)
+                    .equalTo("title",title)
+                var resultcheck :RealmResults<TaskCreate> = querycheck.findAll()
+                if (resultcheck.size != 0){
+                    Toast.makeText(this,"おなじtitleのタスクがあります",Toast.LENGTH_LONG).show()
 
-                if (radioButtontoday.isChecked == true){
-                    radioButtonString = "today"
+                    finish()
+
+
                 }
-                else if (radioButtontomorrow.isChecked == true){
-                    radioButtonString = "tomorrow"
+                else{
+                    saveButton.isClickable = true
+
+                    val radiochecktoday = radioButtontoday.isChecked
+                    val radiochecktomorrow = radioButtontomorrow.isChecked
+                    var maxInt :Int = (spinnerposition+1)
+
+
+
+                    if (radioButtontoday.isChecked == true){
+                        radioButtonString = "today"
+                    }
+                    else if (radioButtontomorrow.isChecked == true){
+                        radioButtonString = "tomorrow"
+                    }
+                    else if(radioButtonEveryDay.isChecked==true){
+                        radioButtonString = "everyday"
+                    }
+
+                    save(title, radioButtonString, maxInt,calendar[HOUR],calendar[MINUTE],localDate)
                 }
-                else if(radioButtonEveryDay.isChecked==true){
-                    radioButtonString = "everyday"
-                }
-
-                check(title)
 
 
 
 
 
-                save(title, radioButtonString, maxInt,calendar[HOUR],calendar[MINUTE],localDate)
+
+
 
                 Log.d("calendarhour",calendar[HOUR].toString())
                 Log.d("calendarminute",calendar[MINUTE].toString())
@@ -105,6 +126,29 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
             }
         }
 
+//        var spinnerDateAdapter :ArrayAdapter<String> = ArrayAdapter<String>(
+//            this, android.R.layout.simple_spinner_dropdown_item
+//        )
+//        spinnerDateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//
+//        spinnerDateAdapter.add("今日")
+//        spinnerDateAdapter.add("明日")
+//
+//        deadlineDate.adapter = spinnerDateAdapter
+//
+//        deadlineDate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(parent: AdapterView<*>?,
+//                                        view: View?, position: Int, id: Long) {
+//                val spinnerParent = parent as Spinner
+//                val item = spinnerParent.selectedItem as String
+//                spinnerDateposition = position
+//
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//            }
+//        }
+
         val memo: TaskCreate? = read()
     }
 
@@ -126,8 +170,6 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
         this.radioButtonString = radioButtonString
 
 
-
-
         realm.executeTransaction{
 
                 val newMemo: TaskCreate = it.createObject(TaskCreate::class.java)
@@ -136,8 +178,31 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
                 newMemo.seekBarMaxInt = maxInt
                 newMemo.calendarHour = calendarhour
                 newMemo.calendarMinute = calendarMinute
-               newMemo.calendarDate = localDate.dayOfYear
 
+                newMemo.calendarDate =
+                    when{
+                        radioButtonString=="tomorrow"->{
+                          if (localDate.dayOfYear==365){
+                              0
+                          }
+                            else{
+                              localDate.dayOfYear+1
+
+                          }
+                        }
+                        else->{
+                            localDate.dayOfYear
+                        }
+
+                    }
+
+
+//            newMemo.calendarDate= when{
+//                spinnerDateposition ==0->localDate.dayOfYear
+//                spinnerDateposition ==1->localDate.dayOfYear+1
+//                spinnerDateposition==2 ->localDate.dayOfYear+7//dateの引き算したい
+//                else->localDate.dayOfYear
+//            }
 
             }
         }
@@ -162,22 +227,4 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
 
     }
 
-    fun check(title: String){
-        var querycheck :RealmQuery<TaskCreate> = realm.where(TaskCreate::class.java)
-            .equalTo("title",title)
-        var resultcheck :RealmResults<TaskCreate> = querycheck.findAll()
-        if (resultcheck.size != 0){
-            saveButton.isClickable  =false
-            Toast.makeText(this,"おなじtitleのタスクがあります",Toast.LENGTH_LONG).show()
-
-            finish()
-        }
-    }
 }
-
-
-
-
-
-
-

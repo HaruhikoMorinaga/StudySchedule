@@ -1,6 +1,8 @@
 package com.morichan.studyschedule
 
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,8 @@ import kotlinx.android.synthetic.main.item_task.view.*
     class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val titleView = view.textView2
          val deadlineview = view.deadline
+         val cardView = view.cardView
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -36,6 +40,13 @@ import kotlinx.android.synthetic.main.item_task.view.*
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.view.textView2.text = task[position].toString()
         holder.view.deadline.text = deadlinetask[position].toString()
+
+        holder.view.cardView.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#add6ff"))
+
+
+
+
+
 
         // タップしたとき
         holder.view.setOnClickListener {
@@ -55,6 +66,10 @@ import kotlinx.android.synthetic.main.item_task.view.*
      fun setOnItemClickListener(listener: OnItemClickListener){
          this.listener = listener
      }
+
+
+
+
 
 
 

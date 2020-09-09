@@ -11,7 +11,7 @@
         android:id="@+id/titleEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
@@ -20,11 +20,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+<!--    <Spinner-->
+<!--        android:id="@+id/deadlineDate"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/timepickbutton"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/titleEditText" />-->
+
+
     <Button
         android:id="@+id/timepickbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:onClick="timepickButton"
         android:text="期限"
         app:layout_constraintEnd_toEndOf="parent"
