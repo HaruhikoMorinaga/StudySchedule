@@ -1,5 +1,6 @@
 package com.morichan.studyschedule
 
+import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -18,11 +19,12 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_today_list_create.*
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.time.DayOfWeek
+import java.time.Instant.now
 import java.time.LocalDate
+import java.time.LocalDateTime.now
 import java.time.LocalTime
 import java.util.*
-import java.util.Calendar.HOUR
-import java.util.Calendar.MINUTE
+import java.util.Calendar.*
 
 
 class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
@@ -38,6 +40,9 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
     var localDate :LocalDate = LocalDate.now()
 
 
+
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     var calendar : Calendar = Calendar.getInstance()
 
@@ -45,7 +50,9 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_list_create)
-        var timenow = LocalTime.now()
+
+        var timenow:Calendar = Calendar.getInstance()
+
 
 
         saveButton.isClickable  =false
@@ -67,8 +74,6 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
                 else{
                     saveButton.isClickable = true
 
-                    val radiochecktoday = radioButtontoday.isChecked
-                    val radiochecktomorrow = radioButtontomorrow.isChecked
                     var maxInt :Int = (spinnerposition+1)
 
 
@@ -83,18 +88,11 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
                         radioButtonString = "everyday"
                     }
 
-                    save(title, radioButtonString, maxInt,calendar[HOUR],calendar[MINUTE],localDate)
+                    save(title, radioButtonString, maxInt,calendar[HOUR_OF_DAY],calendar[MINUTE],localDate)
+
+                    finish()
                 }
 
-
-
-
-
-
-
-
-                Log.d("calendarhour",calendar[HOUR].toString())
-                Log.d("calendarminute",calendar[MINUTE].toString())
                 finish()
 
             }
@@ -105,7 +103,7 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
         spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinneradapter.add("30分")
-        spinneradapter.add("1")
+        spinneradapter.add("1時間")
         spinneradapter.add("1.5時間")
         spinneradapter.add("2時間")
         spinneradapter.add("2.5時間")
@@ -126,28 +124,6 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
             }
         }
 
-//        var spinnerDateAdapter :ArrayAdapter<String> = ArrayAdapter<String>(
-//            this, android.R.layout.simple_spinner_dropdown_item
-//        )
-//        spinnerDateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//
-//        spinnerDateAdapter.add("今日")
-//        spinnerDateAdapter.add("明日")
-//
-//        deadlineDate.adapter = spinnerDateAdapter
-//
-//        deadlineDate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(parent: AdapterView<*>?,
-//                                        view: View?, position: Int, id: Long) {
-//                val spinnerParent = parent as Spinner
-//                val item = spinnerParent.selectedItem as String
-//                spinnerDateposition = position
-//
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//        }
 
         val memo: TaskCreate? = read()
     }
@@ -197,12 +173,6 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
                     }
 
 
-//            newMemo.calendarDate= when{
-//                spinnerDateposition ==0->localDate.dayOfYear
-//                spinnerDateposition ==1->localDate.dayOfYear+1
-//                spinnerDateposition==2 ->localDate.dayOfYear+7//dateの引き算したい
-//                else->localDate.dayOfYear
-//            }
 
             }
         }
@@ -210,12 +180,13 @@ class TodayListCreateActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetL
      @RequiresApi(Build.VERSION_CODES.O)
      override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
 
-        calendar[HOUR] = hourOfDay
+        calendar[HOUR_OF_DAY] = hourOfDay
          calendar[MINUTE] = minute
 
           localDate = LocalDate.now()
 
-         timepickbutton.text=  hourOfDay.toString()+"時"+minute.toString()+"分まで"
+         timepickbutton.text=
+             hourOfDay.toString()+"時"+minute.toString()+"分まで"
 
     }
 

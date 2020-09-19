@@ -2,26 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-   <com.google.android.material.tabs.TabLayout
-       android:id="@+id/tablayout"
+   <androidx.appcompat.widget.Toolbar
        android:layout_width="match_parent"
-       android:layout_height="50dp"
-       android:elevation="10dp"
-       app:tabTextColor="#FFFFFF"
-       android:background="@color/colorPrimaryDark" />
+       android:layout_height="0dp"
+       android:layout_weight="1"
+       app:title="今日のtodo"
+       app:titleTextColor="@android:color/white"
+       android:background="@color/colorPrimary"
+       android:id="@+id/toolBar" />
 
-   <androidx.viewpager2.widget.ViewPager2
-       android:id="@+id/pager"
+
+
+<FrameLayout
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       >
+       android:layout_height="0dp"
+       android:layout_weight="7"
+       android:id="@+id/fragment"
+    />
 
-   </androidx.viewpager2.widget.ViewPager2>
+
+
+
+   <com.google.android.material.bottomnavigation.BottomNavigationView
+       android:id="@+id/navigation"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="2"
+       android:background="?android:attr/windowBackground"
+       app:itemTextColor="@color/colorPrimary"
+       app:itemIconTint="@color/colorPrimary"
+       app:menu="@menu/navigation"
+       />
+
 
 
 

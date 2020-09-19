@@ -1,88 +1,102 @@
 package com.morichan.studyschedule
 
-import GraphFragment
+import android.app.ActionBar
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.WindowManager
+import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
+import io.realm.Realm
+import io.realm.RealmQuery
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import java.math.BigDecimal
+import kotlin.math.max
+
 
 class MainActivity : AppCompatActivity() {
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                message.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+    var pacentage : String = ""
+    val realm = Realm.getDefaultInstance()
 
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener{ item ->
+        when(item.itemId) {
+            R.id.today -> {
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, TodayFragment())
+                    .commit()
+                pacentage = pacentage()
+                toolBar.title = "今日のtodo達成率"+ pacentage+"%"
+                setSupportActionBar(toolBar)
+                return@OnNavigationItemSelectedListener true
+
+
+            }
+            R.id.tomorrow -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, TomorrowFragment())
+                    .commit()
+                toolBar.title = "明日のtodo"
+                setSupportActionBar(toolBar)
+                return@OnNavigationItemSelectedListener true
+
+                true
+            }
+
+            else -> false
+        }}
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
 
-        val fragmentlist: ArrayList<Fragment> = ArrayList<Fragment>()
+        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment, TodayFragment())
+            .commit()
 
 
-        val graphFragment = GraphFragment()
-        val todayFragment = TodayFragment()
-        val tomorrowFragment = TomorrowFragment()
-        val deleteFragment = DeleteFragment()
+    }
 
+    fun pacentage():String{
+        var query:RealmQuery<TaskCreate> =
+            realm.where(TaskCreate::class.java)
+                .equalTo("radioButtoncheck","today")
+                .or().equalTo("radioButtoncheck","everyday")
+        var result = query.findAll()
 
-        fragmentlist.add(todayFragment)
-        fragmentlist.add(tomorrowFragment)
-        fragmentlist.add(deleteFragment)
-        fragmentlist.add(graphFragment)
+        var maxIntlist = mutableListOf<Int>()
+        var progressIntlist = mutableListOf<Int>()
+        for (item in result){
+            maxIntlist.add(item.seekBarMaxInt)
+            progressIntlist.add(item.seekBarprogress)
+        }
+        var maxInt = maxIntlist.sum()
+        var progressInt = progressIntlist.sum()
+//        var pacentageDecimal:BigDecimal = progressInt.toBigDecimal()/maxInt.toBigDecimal()
 
+        var pacentageInt = progressInt*100/ maxInt
+        pacentage = pacentageInt.toString()
 
-
-        val tabLayout = findViewById<TabLayout>(R.id.tablayout)
-
-        val fragmentAdapter = FragmentAdapter(this, fragmentlist)
-
-        var tomorrow :String = "明日"
-
-        val tabConfigurationStrategy =
-            TabConfigurationStrategy { tab, position ->
-                if (position == 0) {
-                    tab.text = "今日"
-                } else if (position == 1) {
-                    tab.text = tomorrow
-
-
-                } else if (position == 2) {
-                    tab.text = "削除履歴"
-                } else if (position ==3){
-                    tab.text = "記録"
-                }
-            }
-        pager.setAdapter(fragmentAdapter)
-        TabLayoutMediator(tabLayout, pager, tabConfigurationStrategy).attach()
-
+        return pacentage
+    }
 
 
 
     }
 
-    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener){
 
-    }
-}
+
+
+
 

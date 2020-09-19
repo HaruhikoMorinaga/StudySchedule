@@ -1,27 +1,47 @@
 package com.morichan.studyschedule
 
 
-import android.content.res.ColorStateList
+import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.SeekBar
+import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_today_edit.view.*
+import io.realm.OrderedRealmCollection
+import io.realm.Realm
+import io.realm.RealmRecyclerViewAdapter
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.item_task.view.*
+import java.time.LocalTime
+import java.util.*
 
 
- open class CustomAdapter(private val task: MutableList<String>,private val deadlinetask: MutableList<String>) : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>(){
+open class CustomAdapter(
+                           private val task: OrderedRealmCollection<TaskCreate>
+                          ,private var listener: OnItemClickListener
+                          ,private val autoUpdate :Boolean) :
+     RealmRecyclerViewAdapter<TaskCreate,CustomAdapter.CustomViewHolder>(
+         task,autoUpdate
 
 
-    lateinit var listener: OnItemClickListener
+     ){
 
+     val realm = Realm.getDefaultInstance()
+     @RequiresApi(Build.VERSION_CODES.O)
+
+     var calendarNow:Int = Calendar.HOUR_OF_DAY
+    var calendarNowminute = Calendar.MINUTE
+    var calendarnowDay = Calendar.DAY_OF_YEAR
      // ViewHolderクラス(別ファイルに書いてもOK)
     class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val titleView = view.textView2
          val deadlineview = view.deadline
-         val cardView = view.cardView
+         val itemseekBar = view.itemseekBar
+         val progressButton = view.progressChangeButton
 
     }
 
@@ -37,37 +57,60 @@ import kotlinx.android.synthetic.main.item_task.view.*
     }
 
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.view.textView2.text = task[position].toString()
-        holder.view.deadline.text = deadlinetask[position].toString()
+        val task:TaskCreate = task.get(position)?:return
+        holder.view.textView2.text = task.title.toString()
+        holder.view.deadline.text =
+            task.calendarHour.toString()+"時"+task.calendarMinute.toString()+"分まで"
+        holder.view.progressChangeButton.text = "保存"
 
-        holder.view.cardView.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#add6ff"))
+        val seekBarRealm = readAll()
 
-
-
-
-
-
-        // タップしたとき
-        holder.view.setOnClickListener {
-            listener.onItemClickListener(it, position,task[position].toString())
+        for (item in seekBarRealm){
+            holder.itemseekBar.max= item.seekBarMaxInt
+            holder.itemseekBar.progress = item.seekBarprogress
         }
 
+
+        val deadlineRealm =deadlinereadAll()
+        for (item in deadlineRealm){
+            if (item.calendarHour<calendarNow){
+                holder.view.textView2.setTextColor(Color.parseColor("#ff0000"))
+                holder.view.deadline.setTextColor(Color.parseColor("#ff0000"))
+            }
+            else{
+                holder.view.textView2.setTextColor(Color.parseColor("#000000"))
+                holder.view.deadline.setTextColor(Color.parseColor("#000000"))
+
+            }
+        }
+
+
+
+        holder.view.setOnClickListener {
+            listener.onItemClickListener(task)
+
+//            holder.view.itemseekBar.visibility = View.VISIBLE
+
+        }
     }
 
-    interface OnItemClickListener{
-        fun onItemClickListener(view: View, position: Int,clickedText:String)
-
-
-        }
-
-    // リスナー
-
-     fun setOnItemClickListener(listener: OnItemClickListener){
-         this.listener = listener
+     interface OnItemClickListener {
+         fun onItemClickListener(item: TaskCreate)
      }
 
+    fun readAll():RealmResults<TaskCreate>{
+        return realm.where(TaskCreate::class.java).findAll()
+    }
 
+     fun deadlinereadAll(): RealmResults<TaskCreate> {
+         return realm.where(TaskCreate::class.java)
+             .equalTo("radioButtoncheck","today")
+             .or().equalTo("radioButtoncheck","everyday")
+             .findAll()
+     }
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,45 +7,30 @@
     android:orientation="vertical"
     tools:context=".TodayFragment">
 
-    <TextView
-        android:id="@+id/datetextview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        android:text="TextView" />
-
-    <Button
-        android:id="@+id/taskplus"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textColor="@android:color/black"
-        android:text="新しいタスク"
-        android:backgroundTint="@color/colorAccent"
-        android:layout_weight="1"
-        android:layout_margin="20dp"
-
-
-
-       />
-
-
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
         android:id="@+id/recyclerView"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="top">
 
     </androidx.recyclerview.widget.RecyclerView>
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/taskplus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:tint="@android:color/white"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="normal"/>
+<!--        tools:ignore="RtlHardcoded" />-->
 
 
 
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

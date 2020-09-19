@@ -6,37 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".TodayListCreateActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="新規作成"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></androidx.appcompat.widget.Toolbar>
+
 
     <EditText
         android:id="@+id/titleEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:hint="タスクを入力"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
 
-<!--    <Spinner-->
-<!--        android:id="@+id/deadlineDate"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/timepickbutton"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/titleEditText" />-->
 
 
     <Button
         android:id="@+id/timepickbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:onClick="timepickButton"
         android:text="期限"
+        android:backgroundTint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleEditText" />
@@ -61,12 +65,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="明日"
+
             android:id="@+id/radioButtontomorrow"></RadioButton>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="毎日"
+
             android:id="@+id/radioButtonEveryDay"></RadioButton>
 
     </RadioGroup>
@@ -91,6 +97,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="保存"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxIntSpinner" />
